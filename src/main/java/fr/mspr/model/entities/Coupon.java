@@ -42,26 +42,19 @@ public class Coupon {
     @Setter
     boolean valide;
 
-    @JoinColumn(name = "coupon_user")
-    @OneToOne
-    @Getter
-    @Setter
-    User user;
-
     @JoinColumn(name = "coupon_partenaire")
     @OneToOne
     @Getter
     @Setter
     Partenaire partenaire;
 
-    public Coupon(final long id, final String nom, final String motif, final String code, final String dateValidation, final boolean valide, final User user, final Partenaire partenaire) {
+    public Coupon(final long id, final String nom, final String motif, final String code, final String dateValidation, final boolean valide, final Partenaire partenaire) {
         this.id = id;
         this.nom = nom;
         this.motif = motif;
         this.code = code;
         this.dateValidation = dateValidation;
         this.valide = valide;
-        this.user = user;
         this.partenaire = partenaire;
     }
 

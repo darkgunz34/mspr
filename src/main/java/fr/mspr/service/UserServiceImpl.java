@@ -3,7 +3,6 @@ package fr.mspr.service;
 import fr.mspr.model.entities.User;
 import fr.mspr.repositoy.UserRepository;
 
-import fr.mspr.repositoy.UserRepositoryCustom;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -17,13 +16,13 @@ public class UserServiceImpl implements UserService {
     private static final Logger LOGGER = LogManager.getLogger(UserServiceImpl.class);
 
 	private final UserRepository userRepository;
-	private final UserRepositoryCustom userRepositoryCustom;
     private final BCryptPasswordEncoder passwordEncoder;
 
-    public UserServiceImpl(final UserRepository userRepository,final BCryptPasswordEncoder passwordEncoder,final UserRepositoryCustom userRepositoryCustom){
+    private static final String HASH = "mspr";
+
+    public UserServiceImpl(final UserRepository userRepository,final BCryptPasswordEncoder passwordEncoder){
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
-        this.userRepositoryCustom = userRepositoryCustom;
     }
 
     @Override
@@ -48,18 +47,30 @@ public class UserServiceImpl implements UserService {
         return this.userRepository.findById(key).isPresent();
     }
 
+    private String hashPassword(final String password){
+        return String.format("%s %s",password,HASH);
+    }
     /**
      * Encode le mode de passe avant le traitement en BDD.
      * @param user Le user.
      */
     private void encodeMotDePasseUser(final User user){
-        user.setPassword(this.passwordEncoder.encode(user.getPassword()));
+        user.setPassword(this.passwordEncoder.encode(this.hashPassword(user.getPassword())));
+    }
+
+    /**
+     * Compare le mot de passe avec celui de la BDD.
+     * @param userFromDataBase Le user issu de la bdd.
+     * @return true si les passwords sont identiques.
+     */
+    private boolean decodeMotDePasseUser(final String password,final User userFromDataBase){
+        return this.passwordEncoder.matches(this.hashPassword(password),userFromDataBase.getPassword());
     }
 
 	@Override
 	public User readFromPseudoAndPassword(final String pseudo, final String pass) {
-        final User userFromDataBase = this.userRepository.findUserByPseudoAndPassword(pseudo,pass);
-        if(userFromDataBase != null) {
+        final User userFromDataBase = this.userRepository.findUserByPseudo(pseudo);
+        if(userFromDataBase != null && this.decodeMotDePasseUser(pass,userFromDataBase)) {
                 LOGGER.debug("Recherche acomplie");
                 return userFromDataBase;
         }
@@ -68,6 +79,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateUser(final User u) {
-        this.userRepositoryCustom.updateUser(u.getList_coupon(),u.getPseudo());
+        this.userRepository.save(u);
     }
 }

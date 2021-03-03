@@ -5,7 +5,6 @@ import lombok.experimental.FieldDefaults;
 
 import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -52,14 +51,14 @@ public class User {
     String prenom;
 
 
-    @ManyToMany(cascade = CascadeType.ALL)
+    @ManyToMany
 	@JoinTable(
 	  name = "user_coupon", 
 	  joinColumns = @JoinColumn(name ="user_id"), 
 	  inverseJoinColumns = @JoinColumn(name = "coupon_id"))
     @Getter
     @Setter
-    List<Coupon> list_coupon;
+    List<Coupon> listCoupon;
     
     public User(final long id, final String pseudo, final String password, final String mail, final String nom, final String prenom) {
         this.id = id;
@@ -83,11 +82,15 @@ public class User {
                 ", mail='" + this.mail + '\'' +
                 ", nom='" + this.nom + '\'' +
                 ", prenom='" + this.prenom + '\'' +
-                ", list_coupon=" + this.list_coupon +
+                ", list_coupon=" + this.listCoupon +
                 '}';
     }
 
     public void ajouterCoupon(final Coupon c){
-        this.list_coupon.add(c);
+        this.listCoupon.add(c);
+    }
+    
+    public void removeCoupon(final Coupon c){
+        this.listCoupon.remove(c);
     }
 }
