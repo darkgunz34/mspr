@@ -88,11 +88,6 @@ public class UserController {
 			if( UtilsEntity.userOrCouponIsNull(u, c, idCoupon)) {
 				 return new ResponseEntity<>("", HttpStatus.BAD_REQUEST);
 			} else {
-				// verifier que le coupon existe bien dans la liste de coupon du user
-				/*u.getListCoupon().forEach(e -> {
-					if( e.getId() == idCoupon) {
-						u.removeCoupon(c);
-						}});*/
 				u.removeCoupon(c);
 				this.userService.updateUser(u);
 				return new ResponseEntity<>("", HttpStatus.OK);	
@@ -110,6 +105,12 @@ public class UserController {
 		if(s!= null) {
 			session.removeAttribute("key");
 		}
+	}
+	
+	@GetMapping(value = "/users")
+	public ResponseEntity<Object> getUsers() {
+		LOGGER.debug("users request()");
+		return new ResponseEntity<>("", HttpStatus.BAD_REQUEST);
 	}
 	
 }
