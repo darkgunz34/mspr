@@ -107,10 +107,4 @@ public class UserController {
 		}
 	}
 	
-	@GetMapping(value = "/users")
-	public ResponseEntity<Object> getUsers() {
-		LOGGER.debug("users request()");
-		return new ResponseEntity<>("", HttpStatus.BAD_REQUEST);
-	}
-	
 }

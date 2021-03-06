@@ -18,10 +18,5 @@ private static final Logger LOGGER = LogManager.getLogger(PartenaireController.c
 	@Autowired
 	private PartenaireService partenaireService;
 	
-	@GetMapping(value = "/partenaires")
-	public ResponseEntity<Object> getCoupons() {
-		LOGGER.debug("partenaires request()");
-		return new ResponseEntity<>("", HttpStatus.BAD_REQUEST);
-	}
 
 }
