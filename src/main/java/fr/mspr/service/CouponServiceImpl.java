@@ -2,6 +2,9 @@ package fr.mspr.service;
 
 import fr.mspr.model.entities.Coupon;
 import fr.mspr.repositoy.CouponRepository;
+
+import java.util.List;
+
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,4 +25,9 @@ public class CouponServiceImpl implements CouponService{
     public Coupon findCouponById(final long id) {
     	return this.couponRepository.findCouponById(id);
     }
+
+	@Override
+	public List<Coupon> findAll() {
+		return this.couponRepository.findAll();
+	}
 }

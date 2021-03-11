@@ -107,4 +107,27 @@ public class UserController {
 		}
 	}
 	
+	@GetMapping(value = "/getusercoupons", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Object> seconnecter(@RequestParam(value = "idUser", defaultValue = "")final long idUser, final HttpSession session) {
+		final String s =(String) session.getAttribute("key");
+		if(s!= null && s.equals(KEY_COOKIE + idUser)) {
+			LOGGER.debug("getcoupons()");
+			try {	
+				final User u = this.userService.readFromKey(idUser);
+				if(u==null){
+					throw new UserException("User inexistant en bdd.");
+				}
+				LOGGER.debug("user trouvé");
+				return new ResponseEntity<>(u.getListCoupon(), HttpStatus.FOUND);
+			} catch (final UserException e) {
+				final String  str = "user non trouvé : " + e.getMessage();
+				LOGGER.debug(str);
+				return new ResponseEntity<>("", HttpStatus.NO_CONTENT);
+			}
+			
+		}
+		return new ResponseEntity<>("", HttpStatus.BAD_REQUEST);
+		
+	}
+	
 }

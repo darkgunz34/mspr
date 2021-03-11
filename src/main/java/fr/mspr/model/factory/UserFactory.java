@@ -4,7 +4,7 @@ import fr.mspr.model.entities.User;
 import fr.mspr.model.exception.UserException;
 import fr.mspr.model.utils.UtilsEntity;
 
-public final class UserFactory {
+public class UserFactory {
     private UserFactory(){
     }
 
