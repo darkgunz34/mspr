@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import fr.mspr.service.PartenaireService;
 
 @RestController
-public class PartenaireController {
+public final class PartenaireController {
 	
 private static final Logger LOGGER = LogManager.getLogger(PartenaireController.class);
 	

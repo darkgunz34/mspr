@@ -17,7 +17,7 @@ import fr.mspr.service.CouponService;
 import javax.servlet.http.HttpSession;
 
 @RestController
-public class UserController {
+public final class UserController {
 
 	private static final Logger LOGGER = LogManager.getLogger(UserController.class);
 

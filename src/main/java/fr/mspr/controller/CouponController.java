@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import fr.mspr.service.CouponService;
@@ -27,6 +28,12 @@ public final class CouponController {
 			LOGGER.debug("getcoupons()");
 			LOGGER.debug("coupons trouvé ");
 			return new ResponseEntity<>(couponService.findAll(), HttpStatus.FOUND);
+	}
+	
+	@GetMapping(value= "/getcoupon", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<Object> getCouponById(@RequestParam(value="idCoupon") final Long idCoupon) {
+			LOGGER.debug("getcouponsById()");
+			return new ResponseEntity<>(couponService.findCouponById(idCoupon), HttpStatus.FOUND);
 	}
 
 }
