@@ -10,7 +10,7 @@ public final class CustomGetMessage {
         stackTrace.append(entete);
         stackTrace.append("\n");
         for (int i = 0; i < nombreDeLigne; i++) {
-            stackTrace.append(traceElements[i].toString());
+            stackTrace.append(traceElements[i]);
             stackTrace.append("\n");
         }
         return stackTrace.toString();

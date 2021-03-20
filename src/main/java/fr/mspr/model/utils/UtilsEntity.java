@@ -1,7 +1,5 @@
 package fr.mspr.model.utils;
 
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import fr.mspr.model.constante.UserConstante;
 import fr.mspr.model.entities.Coupon;
 import fr.mspr.model.entities.Partenaire;
@@ -12,8 +10,7 @@ import fr.mspr.model.exception.PartenaireException;
 import fr.mspr.model.exception.UserException;
 
 public final class UtilsEntity {
-	private static final Logger LOGGER = LogManager.getLogger(UtilsEntity.class);
-	
+
     private UtilsEntity(){
 
     }
@@ -67,18 +64,8 @@ public final class UtilsEntity {
         }
     }
     
-    public static boolean userOrCouponIsNull(final User u, final Coupon c, long idCoupon) {
-    	if(u == null) {
-    		final String str = "User non trouvé avec l'id : " + idCoupon; // ?
-			LOGGER.debug(str);
-			return true;
-    	}
-    	if(c == null) {
-    		final String str = "Coupon non trouvé avec l'id : " + idCoupon;
-    		LOGGER.debug(str);
-    		return true;
-    	}
-    	return false;
+    public static boolean userOrCouponIsNull(final User u, final Coupon c) {
+        return u == null || c == null;
     }
     
 }

@@ -13,7 +13,6 @@ import javax.persistence.Table;
 @Table(name = "partenaire")
 @NoArgsConstructor
 @FieldDefaults(level = AccessLevel.PRIVATE)
-@ToString(of = {"id","nom","adresse"})
 public class Partenaire {
 
 	@Id
@@ -33,9 +32,18 @@ public class Partenaire {
     @Setter
     String adresse;
 
-    public Partenaire(final long id, final String nom, final String adresse) {
+    public Partenaire(long id, String nom, String adresse) {
         this.id = id;
         this.nom = nom;
         this.adresse = adresse;
+    }
+
+    @Override
+    public String toString() {
+        return "Partenaire{" +
+                "id=" + id +
+                ", nom='" + nom + '\'' +
+                ", adresse='" + adresse + '\'' +
+                '}';
     }
 }

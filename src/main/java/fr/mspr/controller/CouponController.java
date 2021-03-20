@@ -16,7 +16,7 @@ public final class CouponController {
 	
 	private static final Logger LOGGER = LogManager.getLogger(CouponController.class);
 	
-	private CouponService couponService;
+	private final CouponService couponService;
 	
 	public CouponController(final CouponService couponService) {
 		LOGGER.debug("CouponController()");
@@ -24,16 +24,20 @@ public final class CouponController {
 	}
 	
 	@GetMapping(value = "/getcoupons", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> seconnecter() {
-			LOGGER.debug("getcoupons()");
-			LOGGER.debug("coupons trouvé ");
+	public ResponseEntity<Object> getcoupons() {
+		LOGGER.debug("getcoupons()");
+		LOGGER.debug("coupons trouvé ");
 			return new ResponseEntity<>(couponService.findAll(), HttpStatus.FOUND);
 	}
 	
 	@GetMapping(value= "/getcoupon", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> getCouponById(@RequestParam(value="idCoupon") final Long idCoupon) {
-			LOGGER.debug("getcouponsById()");
-			return new ResponseEntity<>(couponService.findCouponById(idCoupon), HttpStatus.FOUND);
+	public ResponseEntity<Object> getcoupon(@RequestParam("idCoupon") final Long idCoupon) {
+		LOGGER.debug("getcouponsById()");
+			if(idCoupon != 0){
+				return new ResponseEntity<>(couponService.findCouponById(idCoupon), HttpStatus.FOUND);
+			}else{
+				return new ResponseEntity<>("", HttpStatus.NOT_FOUND);
+			}
 	}
 
 }

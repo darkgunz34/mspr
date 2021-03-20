@@ -3,6 +3,7 @@ package fr.mspr.model.entities;
 import lombok.*;
 import lombok.experimental.FieldDefaults;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Column;
@@ -58,7 +59,7 @@ public class User {
 	  inverseJoinColumns = @JoinColumn(name = "coupon_id"))
     @Getter
     @Setter
-    List<Coupon> listCoupon;
+    List<Coupon> listCoupon = new ArrayList<>();
     
     public User(final long id, final String pseudo, final String password, final String mail, final String nom, final String prenom) {
         this.id = id;

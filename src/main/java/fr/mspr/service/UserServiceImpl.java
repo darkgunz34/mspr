@@ -20,7 +20,7 @@ public class UserServiceImpl implements UserService {
 
     private static final String HASH = "mspr";
 
-    public UserServiceImpl(final UserRepository userRepository,final BCryptPasswordEncoder passwordEncoder){
+    public UserServiceImpl(final UserRepository userRepository, final BCryptPasswordEncoder passwordEncoder){
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
@@ -48,7 +48,7 @@ public class UserServiceImpl implements UserService {
     }
 
     private String hashPassword(final String password){
-        return String.format("%s %s",password,HASH);
+        return String.format("%s %s",password, HASH);
     }
     /**
      * Encode le mode de passe avant le traitement en BDD.
@@ -63,7 +63,7 @@ public class UserServiceImpl implements UserService {
      * @param userFromDataBase Le user issu de la bdd.
      * @return true si les passwords sont identiques.
      */
-    private boolean decodeMotDePasseUser(final String password,final User userFromDataBase){
+    private boolean decodeMotDePasseUser(final String password, final User userFromDataBase){
         return this.passwordEncoder.matches(this.hashPassword(password),userFromDataBase.getPassword());
     }
 
@@ -71,7 +71,7 @@ public class UserServiceImpl implements UserService {
 	public User readFromPseudoAndPassword(final String pseudo, final String pass) {
         final User userFromDataBase = this.userRepository.findUserByPseudo(pseudo);
         if(userFromDataBase != null && this.decodeMotDePasseUser(pass,userFromDataBase)) {
-                LOGGER.debug("Recherche acomplie");
+            LOGGER.debug("Recherche acomplie");
                 return userFromDataBase;
         }
         return null;

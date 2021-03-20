@@ -32,7 +32,7 @@ public final class UserController {
 	}
 
 	@GetMapping(value = "/getuser", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> seconnecter(@RequestParam(value = "pseudo", defaultValue = "")final String pseudo, @RequestParam(value = "password", defaultValue = "") final String password,final HttpSession session) {
+	public ResponseEntity<Object> getuser(@RequestParam(value = "pseudo", defaultValue = "") final String pseudo, @RequestParam(value = "password", defaultValue = "") final String password, final HttpSession session) {
 		LOGGER.debug("seconnecter()");
 		try {
 			UtilsEntity.champNonVideUser(pseudo);
@@ -42,7 +42,7 @@ public final class UserController {
 				throw new UserException("User inexistant en bdd.");
 			}
 			LOGGER.debug("user trouvé");
-			session.setAttribute("key","moncookieperso" + u.getId());
+			session.setAttribute("key", KEY_COOKIE + u.getId());
 			return new ResponseEntity<>(u, HttpStatus.FOUND);
 		} catch (final UserException e) {
 			final String  str = "user non trouvé : " + e.getMessage();
@@ -51,17 +51,17 @@ public final class UserController {
 		}
 	}
 
-	@PostMapping(value = "/addCoupon")
-	public ResponseEntity<Object> addCouponIntoListUser(@RequestParam(value = "idUser", defaultValue = "")final long idUser,@RequestParam(value = "idCoupon", defaultValue = "") final long idCoupon,final HttpSession session) {
+	@PostMapping("/addCoupon")
+	public ResponseEntity<Object> addCoupon(@RequestParam(value = "idUser", defaultValue = "") final long idUser, @RequestParam(value = "idCoupon", defaultValue = "") final long idCoupon, final HttpSession session) {
 		final String s =(String) session.getAttribute("key");
-		if(s!= null && s.equals(KEY_COOKIE + idUser)) {
+		if(s != null && s.equals(KEY_COOKIE + idUser)) {
 			LOGGER.debug("addCouponIntoListUser");
 			LOGGER.debug(s);
 
 			final User u = this.userService.readFromKey(idUser);
 			final Coupon c = this.couponService.findCouponById(idCoupon);
 			
-			if( UtilsEntity.userOrCouponIsNull(u, c, idCoupon)) {
+			if( UtilsEntity.userOrCouponIsNull(u, c)) {
 				 return new ResponseEntity<>("", HttpStatus.BAD_REQUEST);
 			} else {
 				u.ajouterCoupon(c);
@@ -74,18 +74,18 @@ public final class UserController {
 		}
 	}
 
-	@DeleteMapping(value = "/delCoupon")
-	public ResponseEntity<Object> delCouponIntoListUser(@RequestParam(value = "idUser", defaultValue = "")final long idUser,@RequestParam(value = "idCoupon", defaultValue = "") final long idCoupon,final HttpSession session) {
+	@DeleteMapping("/delCoupon")
+	public ResponseEntity<Object> delCoupon(@RequestParam(value = "idUser", defaultValue = "") final long idUser, @RequestParam(value = "idCoupon", defaultValue = "") final long idCoupon, final HttpSession session) {
 		final String s =(String) session.getAttribute("key");
-		if(s!= null && s.equals(KEY_COOKIE + idUser)) {
-			
+		if(s != null && s.equals(KEY_COOKIE + idUser)) {
+
 			LOGGER.debug("delCouponIntoListUser");
 			LOGGER.debug(s);
 			
 			final User u = this.userService.readFromKey(idUser);
 			final Coupon c = this.couponService.findCouponById(idCoupon);
 			
-			if( UtilsEntity.userOrCouponIsNull(u, c, idCoupon)) {
+			if( UtilsEntity.userOrCouponIsNull(u, c)) {
 				 return new ResponseEntity<>("", HttpStatus.BAD_REQUEST);
 			} else {
 				u.removeCoupon(c);
@@ -98,19 +98,22 @@ public final class UserController {
 		}
 	}
 
-	@GetMapping(value = "/logout")
-	public void seDeconnecter(final HttpSession session) {
+	@GetMapping("/logout")
+	public ResponseEntity<Object> seDeconnecter(final HttpSession session) {
 		LOGGER.debug("seDeconnecter()");
 		final String s =(String) session.getAttribute("key");
 		if(s!= null) {
 			session.removeAttribute("key");
+			return new ResponseEntity<>("", HttpStatus.OK);
+		}else{
+			return new ResponseEntity<>("", HttpStatus.NOT_FOUND);
 		}
 	}
 	
 	@GetMapping(value = "/getusercoupons", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> seconnecter(@RequestParam(value = "idUser", defaultValue = "")final long idUser, final HttpSession session) {
+	public ResponseEntity<Object> getusercoupons(@RequestParam(value = "idUser", defaultValue = "") final long idUser, final HttpSession session) {
 		final String s =(String) session.getAttribute("key");
-		if(s!= null && s.equals(KEY_COOKIE + idUser)) {
+		if(s != null && s.equals(KEY_COOKIE + idUser)) {
 			LOGGER.debug("getcoupons()");
 			try {	
 				final User u = this.userService.readFromKey(idUser);
@@ -122,11 +125,11 @@ public final class UserController {
 			} catch (final UserException e) {
 				final String  str = "user non trouvé : " + e.getMessage();
 				LOGGER.debug(str);
-				return new ResponseEntity<>("", HttpStatus.NO_CONTENT);
+				return new ResponseEntity<>("", HttpStatus.NOT_FOUND);
 			}
 			
 		}
-		return new ResponseEntity<>("", HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>("", HttpStatus.UNAUTHORIZED );
 		
 	}
 	
