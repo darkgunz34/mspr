@@ -64,9 +64,13 @@ public final class UserController {
 			if( UtilsEntity.userOrCouponIsNull(u, c)) {
 				 return new ResponseEntity<>("", HttpStatus.BAD_REQUEST);
 			} else {
-				u.ajouterCoupon(c);
-				this.userService.updateUser(u);
-				return new ResponseEntity<>("", HttpStatus.OK);
+				if(u.getListCoupon().contains(c)) {
+					return new ResponseEntity<>("", HttpStatus.NOT_ACCEPTABLE);
+				} else {
+					u.ajouterCoupon(c);
+					this.userService.updateUser(u);
+					return new ResponseEntity<>("", HttpStatus.OK);
+				}
 			}
 		}
 		else{
