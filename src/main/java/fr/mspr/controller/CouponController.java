@@ -1,5 +1,6 @@
 package fr.mspr.controller;
 
+import fr.mspr.model.entities.Coupon;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
@@ -33,11 +34,12 @@ public final class CouponController {
 	@GetMapping(value= "/getcoupon", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> getcoupon(@RequestParam("idCoupon") final Long idCoupon) {
 		LOGGER.debug("getcouponsById()");
-			if(idCoupon != 0){
-				return new ResponseEntity<>(couponService.findCouponById(idCoupon), HttpStatus.FOUND);
-			}else{
-				return new ResponseEntity<>("", HttpStatus.NOT_FOUND);
-			}
+		Coupon c = couponService.findCouponById(idCoupon);
+		if(c != null){
+			return new ResponseEntity<>(c, HttpStatus.FOUND);
+		}else{
+			return new ResponseEntity<>("", HttpStatus.NOT_FOUND);
+		}
 	}
 
 }
